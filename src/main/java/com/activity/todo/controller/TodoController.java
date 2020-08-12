@@ -1,0 +1,155 @@
+package com.activity.todo.controller;
+
+import java.util.List;
+import java.util.Optional;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import com.activity.todo.exception.TaskForUserNotFoundException;
+//import com.activity.todo.exception.TaskExceptionHandler;
+import com.activity.todo.exception.TaskIdMismatchException;
+import com.activity.todo.exception.TaskIdNotFoundException;
+import com.activity.todo.exception.UserNotFoundException;
+import com.activity.todo.model.TodoTask;
+import com.activity.todo.repository.TodoTaskRepo;
+import com.activity.todo.service.TodoListService;
+
+
+
+@Controller
+
+public class TodoController {
+
+
+	@Autowired
+	private TodoListService todoTaskService;
+	
+	private String getLoggedInUserName() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (principal instanceof UserDetails) {
+			return ((UserDetails) principal).getUsername();
+		}
+
+		return principal.toString();
+	}
+	
+	
+	
+//	
+//	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
+//	public String showTodos(ModelMap model) {
+//		model.put("todos", todoTaskService.findByUserName(getLoggedInUserName()));
+//		return "list-todos";
+//	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String showWelcomePage(ModelMap model) {
+		model.put("todos", todoTaskService.findByUserName(getLoggedInUserName()));
+		model.put("name", getLoggedInUserName());
+		return "index";
+	}
+
+
+	@RequestMapping(value = "/add", method = RequestMethod.GET)
+	public String Add(ModelMap model) {
+		model.addAttribute("todo", new TodoTask());
+		return "addTask";
+	}
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST)
+	public String addTodo(ModelMap model,TodoTask todo, BindingResult result) {
+
+		if (result.hasErrors()) {
+			throw new TaskIdMismatchException();
+		}
+		todo.setUserName(getLoggedInUserName());
+		todoTaskService.save(todo);
+		return "redirect:/";
+	}
+
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	public String showUpdateTodoPage(@RequestParam long id, ModelMap model) {
+		Optional<TodoTask> todo = todoTaskService.findById(id);
+		model.put("todo", todo);
+		return "update";
+	}
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String updateTodo(ModelMap model, TodoTask todo, BindingResult result) {
+
+		if (result.hasErrors()) {
+			throw new TaskIdMismatchException();
+		}
+
+		todo.setUserName(getLoggedInUserName());
+		todoTaskService.save(todo);
+		return "redirect:/";
+	}
+
+	
+	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+	public String deleteTodo(@RequestParam long id) {
+		todoTaskService.deleteById(id);
+		return "redirect:/";
+	}
+
+	
+
+//	@RequestMapping(value = "/all", method = RequestMethod.GET)
+//	public List<TodoTask> getAllist(ModelMap model) {
+//		System.out.println("teset");
+//		return todoTask.findAll();
+//	}
+//	
+
+//	@RequestMapping(value = "/get", method = RequestMethod.POST)
+//	public List<TodoTask> addTask(@RequestParam(required = true, name = "UserId") Long UserId) {
+//		if (!todoTask.existsByUserId(UserId)) {
+//			throw new UserNotFoundException();
+//		}
+//
+//		List<TodoTask> response = todoTask.findByUserId(UserId);
+//		if (response.isEmpty()) {
+//			throw new TaskForUserNotFoundException();
+//		} else {
+//			return todoTask.findByUserId(UserId);
+//		}
+//
+//	}
+
+//	@RequestMapping(value = "/update", method = RequestMethod.POST)
+//	public TodoTask updateTask(@RequestBody TodoTask todotask) {
+//		return todoTask.save(todotask);
+//	}
+//
+//	@DeleteMapping(value = "/delete")
+//	public void updateTask(@RequestParam(required = true, name = "id") Long id) {
+//		System.out.println("teset");
+//		if (!todoTask.existsById(id)) {
+//			throw new TaskIdNotFoundException();
+//		} else {
+//			todoTask.deleteById(id);
+//		}
+//	}
+
+//	@RequestMapping("/error")
+//    public String handleError() {
+//        //do something like logging
+//        return "error";
+//    }
+
+}

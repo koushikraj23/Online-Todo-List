@@ -1,0 +1,13 @@
+
+<nav role="navigation" class="navbar navbar-default">
+	<div class="">
+		<a href="/" class="navbar-brand">Todo List</a>
+	
+		<ul class="nav navbar-nav">
+			<li><a href="https://github.com/koushikraj23/Online-Todo-List">Github</a></li>
+		</ul>
+		<ul class="nav navbar-nav">
+			<li><a href="/logout">Logout</a></li>
+		</ul>
+	</div>
+</nav>
