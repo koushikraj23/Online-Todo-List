@@ -8,27 +8,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
-    public void configureGlobalSecurity(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.inMemoryAuthentication()
-            .passwordEncoder(NoOpPasswordEncoder.getInstance())
-        		.withUser("admin").password("admin")
-                .roles("USER", "ADMIN");
-        auth.inMemoryAuthentication()
-        .passwordEncoder(NoOpPasswordEncoder.getInstance())
-    		.withUser("User").password("User")
-            .roles("USER", "USER");
-    }
-	
+	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance()).withUser("admin")
+				.password("admin").roles("USER", "ADMIN");
+		auth.inMemoryAuthentication().passwordEncoder(NoOpPasswordEncoder.getInstance()).withUser("User")
+				.password("User").roles("USER", "USER");
+	}
+
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/login", "/h2-console/**").permitAll()
-                .antMatchers("/", "/*todo*/**").access("hasRole('USER')").and()
-                .formLogin();
-        
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
-    }
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/login", "/h2-console/**").permitAll().antMatchers("/", "/*todo*/**")
+				.access("hasRole('USER')").and().formLogin();
+
+		http.csrf().disable();
+		http.headers().frameOptions().disable();
+	}
 }

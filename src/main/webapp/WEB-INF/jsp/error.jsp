@@ -6,7 +6,6 @@
 <body>
 <div class="container">
 Error:${error}
-Cause:${exception}
 </div>
 </body>
 <%@ include file="static/footer.jspf"%>

@@ -1,14 +1,9 @@
 package com.activity.todo.exception;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -23,9 +18,7 @@ public class TaskExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({ TaskIdNotFoundException.class, EmptyResultDataAccessException.class })
 	protected ModelAndView notFoundHandler(Exception ex, WebRequest request) {
-		
-//		return handleExceptionInternal(ex, "Task for the given id was not found", new HttpHeaders(),
-//				HttpStatus.NOT_FOUND, request);
+
 		ModelAndView exceptionView = new ModelAndView();
 		exceptionView.addObject("exception","Task for the given id was not found");
 		exceptionView.addObject("error", HttpStatus.NOT_FOUND);

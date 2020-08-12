@@ -13,7 +13,7 @@
 				<div class="panel-body">
 					<form:form method="post" modelAttribute="todo">
 						<form:hidden path="id" />
-						
+							<form:hidden path="createdAt"/>
 						<fieldset class="form-group">
 							<form:label path="title">Title</form:label>
 							<form:input path="title" type="text" class="form-control"
@@ -28,17 +28,17 @@
 						</fieldset>
 						<fieldset class="form-group">
 							<form:label path="checked">checked</form:label>
-							<form:input path="checked" type="text" class="form-control"
-								required="required" />	
+							<form:select path="checked"  class="form-control"
+								required="required" >
+								<option value="true">True</option>
+								<option value="false">False</option>	
+								</form:select>
 							<form:errors path="description" cssClass="text-warning" />
 						</fieldset>
 						
-						<fieldset class="form-group">
-							<form:label path="createdAt">createdAt</form:label>
-							<form:input path="createdAt" type="text" class="form-control"
-								 />
-							<form:errors path="createdAt" cssClass="text-warning" />
-						</fieldset>
+					
+							<form:hidden path="createdAt"/>
+						
 						<button type="submit" class="btn btn-success">Save</button>
 					</form:form>
 				</div>

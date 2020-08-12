@@ -3,7 +3,6 @@ package com.activity.todo.controller;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,16 +26,13 @@ import com.activity.todo.model.TodoTask;
 import com.activity.todo.repository.TodoTaskRepo;
 import com.activity.todo.service.TodoListService;
 
-
-
 @Controller
 
 public class TodoController {
 
-
 	@Autowired
 	private TodoListService todoTaskService;
-	
+
 	private String getLoggedInUserName() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -46,23 +42,13 @@ public class TodoController {
 
 		return principal.toString();
 	}
-	
-	
-	
-//	
-//	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
-//	public String showTodos(ModelMap model) {
-//		model.put("todos", todoTaskService.findByUserName(getLoggedInUserName()));
-//		return "list-todos";
-//	}
-	
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String showWelcomePage(ModelMap model) {
 		model.put("todos", todoTaskService.findByUserName(getLoggedInUserName()));
 		model.put("name", getLoggedInUserName());
 		return "index";
 	}
-
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String Add(ModelMap model) {
@@ -71,7 +57,7 @@ public class TodoController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String addTodo(ModelMap model,TodoTask todo, BindingResult result) {
+	public String addTodo(ModelMap model, TodoTask todo, BindingResult result) {
 
 		if (result.hasErrors()) {
 			throw new TaskIdMismatchException();
@@ -100,56 +86,10 @@ public class TodoController {
 		return "redirect:/";
 	}
 
-	
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String deleteTodo(@RequestParam long id) {
 		todoTaskService.deleteById(id);
 		return "redirect:/";
 	}
-
-	
-
-//	@RequestMapping(value = "/all", method = RequestMethod.GET)
-//	public List<TodoTask> getAllist(ModelMap model) {
-//		System.out.println("teset");
-//		return todoTask.findAll();
-//	}
-//	
-
-//	@RequestMapping(value = "/get", method = RequestMethod.POST)
-//	public List<TodoTask> addTask(@RequestParam(required = true, name = "UserId") Long UserId) {
-//		if (!todoTask.existsByUserId(UserId)) {
-//			throw new UserNotFoundException();
-//		}
-//
-//		List<TodoTask> response = todoTask.findByUserId(UserId);
-//		if (response.isEmpty()) {
-//			throw new TaskForUserNotFoundException();
-//		} else {
-//			return todoTask.findByUserId(UserId);
-//		}
-//
-//	}
-
-//	@RequestMapping(value = "/update", method = RequestMethod.POST)
-//	public TodoTask updateTask(@RequestBody TodoTask todotask) {
-//		return todoTask.save(todotask);
-//	}
-//
-//	@DeleteMapping(value = "/delete")
-//	public void updateTask(@RequestParam(required = true, name = "id") Long id) {
-//		System.out.println("teset");
-//		if (!todoTask.existsById(id)) {
-//			throw new TaskIdNotFoundException();
-//		} else {
-//			todoTask.deleteById(id);
-//		}
-//	}
-
-//	@RequestMapping("/error")
-//    public String handleError() {
-//        //do something like logging
-//        return "error";
-//    }
 
 }

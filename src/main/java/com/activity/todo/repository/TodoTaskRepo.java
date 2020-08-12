@@ -13,13 +13,12 @@ import org.springframework.stereotype.Repository;
 import com.activity.todo.model.TodoTask;
 
 @Repository
-public interface TodoTaskRepo extends JpaRepository<TodoTask, Long>{
-	
+public interface TodoTaskRepo extends JpaRepository<TodoTask, Long> {
+
 	List<TodoTask> findAll();
-	
-Optional<TodoTask> findById(Long id);
+
+	Optional<TodoTask> findById(Long id);
 
 	List<TodoTask> findByUserName(String name);
-	
-	
+
 }
